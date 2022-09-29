@@ -47,7 +47,7 @@ public class PagoFragment extends Fragment {
             @Override
             public void onChanged(ArrayList<Pago> pagos)
             {
-                GridLayoutManager gridLayoutManager = new GridLayoutManager(context,1,GridLayoutManager.VERTICAL,false);
+                GridLayoutManager gridLayoutManager = new GridLayoutManager(context,3,GridLayoutManager.HORIZONTAL,false);
                 rvPagos.setLayoutManager(gridLayoutManager);
                 pagoAdapter = new PagoAdapter(context,pagos,getLayoutInflater());
                 rvPagos.setAdapter(pagoAdapter);

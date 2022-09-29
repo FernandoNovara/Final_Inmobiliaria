@@ -1,7 +1,6 @@
 package com.example.final_inmobiliaria.ui.Inmueble;
 
 import android.app.Application;
-import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -16,11 +15,9 @@ import java.util.ArrayList;
 public class InmueblesViewModel extends AndroidViewModel {
 
     private MutableLiveData<ArrayList<Inmueble>> inmuebleMutable;
-    private Context context;
 
     public InmueblesViewModel(@NonNull Application application) {
         super(application);
-        context = application.getApplicationContext();
     }
 
     public LiveData<ArrayList<Inmueble>> getInmuebleMutable()

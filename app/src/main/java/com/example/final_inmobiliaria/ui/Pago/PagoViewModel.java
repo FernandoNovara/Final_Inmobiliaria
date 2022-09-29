@@ -35,7 +35,6 @@ public class PagoViewModel extends AndroidViewModel
     {
         ApiClient api = ApiClient.getApi();
         Contrato contrato = (Contrato) bundle.getSerializable("contrato");
-        ArrayList<Pago> pagos = api.obtenerPagos(contrato);
-        PagoMutable.setValue(pagos);
+        this.PagoMutable.setValue(api.obtenerPagos(contrato));
     }
 }
