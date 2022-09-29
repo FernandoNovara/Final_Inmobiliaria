@@ -3,11 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Inmueble.InmueblesFragment">
+    tools:context=".ui.Pago.PagoFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvRecyclerInmuebles"
+        android:id="@+id/rvPagos"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
 </FrameLayout>

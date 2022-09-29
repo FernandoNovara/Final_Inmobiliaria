@@ -1,6 +1,7 @@
-package com.example.final_inmobiliaria.ui.Contrato;
+package com.example.final_inmobiliaria.ui.Inmueble;
 
 import android.app.Application;
+import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -12,26 +13,28 @@ import com.example.final_inmobiliaria.request.ApiClient;
 
 import java.util.ArrayList;
 
-public class ContratoViewModel extends AndroidViewModel
-{
-    private MutableLiveData<ArrayList<Inmueble>> InmuebleMutable;
+public class InmueblesViewModel extends AndroidViewModel {
 
-    public ContratoViewModel(@NonNull Application application) {
+    private MutableLiveData<ArrayList<Inmueble>> inmuebleMutable;
+    private Context context;
+
+    public InmueblesViewModel(@NonNull Application application) {
         super(application);
+        context = application.getApplicationContext();
     }
 
     public LiveData<ArrayList<Inmueble>> getInmuebleMutable()
     {
-        if (InmuebleMutable == null)
+        if (inmuebleMutable == null)
         {
-            InmuebleMutable = new MutableLiveData<>();
+            inmuebleMutable = new MutableLiveData<>();
         }
-        return InmuebleMutable;
+        return inmuebleMutable;
     }
 
     public void cargarInmuebles()
     {
         ApiClient api = ApiClient.getApi();
-        InmuebleMutable.setValue(api.obtenerPropiedadesAlquiladas());
+        this.inmuebleMutable.setValue(api.obtnerPropiedades());
     }
 }

@@ -1,38 +1,60 @@
 package com.example.final_inmobiliaria.ui.Inquilino;
 
-import androidx.lifecycle.ViewModelProvider;
-
+import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.final_inmobiliaria.R;
+import com.example.final_inmobiliaria.modelo.Inmueble;
+
+import java.util.ArrayList;
 
 public class InquilinoFragment extends Fragment {
 
-    private InquilinoViewModel mViewModel;
+    private InquilinoViewModel inquilinoViewModel;
+    private RecyclerView rvInquilino;
+    private InquilinoAdapter inquilinoAdapter;
+    private Context context;
 
-    public static InquilinoFragment newInstance() {
+    public static InquilinoFragment newInstance()
+    {
         return new InquilinoFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_inquilino, container, false);
+        View view = inflater.inflate(R.layout.fragment_inquilino, container, false);
+        context = view.getContext();
+        Inicializar(view);
+        return view;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(InquilinoViewModel.class);
-        // TODO: Use the ViewModel
+    private void Inicializar(View view)
+    {
+        rvInquilino = view.findViewById(R.id.rvRecyclerInquilino);
+        inquilinoViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication()).create(InquilinoViewModel.class);
+        inquilinoViewModel.getInmuebleMutable().observe(getViewLifecycleOwner(), new Observer<ArrayList<Inmueble>>() {
+            @Override
+            public void onChanged(ArrayList<Inmueble> inmuebles) {
+                GridLayoutManager gridLayoutManager = new GridLayoutManager(context,2,GridLayoutManager.VERTICAL,false);
+                rvInquilino.setLayoutManager(gridLayoutManager);
+                inquilinoAdapter = new InquilinoAdapter(context,inmuebles,getLayoutInflater());
+                rvInquilino.setAdapter(inquilinoAdapter);
+            }
+        });
+
+        inquilinoViewModel.cargarInmuebles();
     }
 
 }

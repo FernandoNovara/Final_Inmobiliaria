@@ -1,5 +1,7 @@
 package com.example.final_inmobiliaria.ui.Inicio;
 
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -13,26 +15,46 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.final_inmobiliaria.R;
+import com.example.final_inmobiliaria.databinding.FragmentInicioBinding;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 
 public class InicioFragment extends Fragment {
 
-    private InicioViewModel mViewModel;
+    private FragmentInicioBinding binding;
+    private InicioViewModel inicioViewModel;
 
     public static InicioFragment newInstance() {
         return new InicioFragment();
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_inicio, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,@Nullable Bundle savedInstanceState)
+    {
+        inicioViewModel = new ViewModelProvider(this).get(InicioViewModel.class);
+        binding = FragmentInicioBinding.inflate(inflater,container,false);
+        View view = binding.getRoot();
+
+        inicioViewModel.getLeerMapaMutable().observe(getViewLifecycleOwner(), new Observer<LeerMapa>() {
+            @Override
+            public void onChanged(LeerMapa leerMapa) {
+                SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
+                        .findFragmentById(R.id.map);
+                mapFragment.getMapAsync(leerMapa);
+            }
+        });
+
+        inicioViewModel.obtenerMapa();
+        return view;
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(InicioViewModel.class);
-        // TODO: Use the ViewModel
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
-
 }
