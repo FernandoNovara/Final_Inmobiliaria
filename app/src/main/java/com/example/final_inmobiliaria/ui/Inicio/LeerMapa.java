@@ -4,15 +4,15 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
+import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 
-import com.example.final_inmobiliaria.databinding.ActivityMapsBinding;
-import com.example.final_inmobiliaria.databinding.ContentMainBinding;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
@@ -23,6 +23,9 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+
+import java.util.List;
 
 public class LeerMapa implements OnMapReadyCallback {
 
@@ -88,9 +91,64 @@ public class LeerMapa implements OnMapReadyCallback {
         }
         else
         {
+            long tiempo = 5000;
+            float distancia = 10;
 
+            ListenerPosition listener = new ListenerPosition();
+
+            manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, tiempo, distancia, listener);
+
+            Task<Location> tl = fl.getLastLocation();
+
+            tl.addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null)
+                    {
+                        LatLng miUbicacion = new LatLng(location.getLatitude(),location.getLongitude());
+                        googleMap.addMarker(new MarkerOptions().position(miUbicacion))
+                                .setTitle("Mi Ubicacion");
+                    }
+                }
+            });
+            manager.removeUpdates(listener);
         }
     }
 
+    private class ListenerPosition implements LocationListener
+    {
 
+        @Override
+        public void onLocationChanged(@NonNull Location location) {
+            //Recibe nueva posicion.
+            double lat = location.getLatitude();
+            double lon = location.getLongitude();
+        }
+
+        @Override
+        public void onLocationChanged(@NonNull List<Location> locations) {
+            LocationListener.super.onLocationChanged(locations);
+            //Recibe una lista de posiciones.
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            //LocationListener.super.onStatusChanged(provider, status, extras);
+            //Cambio en el estado del proveedor
+        }
+
+        @Override
+        public void onProviderEnabled(@NonNull String provider) {
+            LocationListener.super.onProviderEnabled(provider);
+
+            //El proveedor ha sido conectado
+        }
+
+        @Override
+        public void onProviderDisabled(@NonNull String provider) {
+            LocationListener.super.onProviderDisabled(provider);
+
+            //El proveedor ha sido desconectado
+        }
+    }
 }

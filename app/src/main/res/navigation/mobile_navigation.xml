@@ -9,17 +9,21 @@
     <fragment
         android:id="@+id/logoutFragment"
         android:name="com.example.final_inmobiliaria.ui.logout.logoutFragment"
-        android:label="fragment_logout"
-        tools:layout="@layout/fragment_logout" />
+        android:label="Cerrar Sesion"
+        tools:layout="@layout/fragment_logout" >
+        <action
+            android:id="@+id/action_logoutFragment_to_loginActivity"
+            app:destination="@id/loginActivity" />
+    </fragment>
     <fragment
         android:id="@+id/perfilFragment"
         android:name="com.example.final_inmobiliaria.ui.Perfil.PerfilFragment"
-        android:label="fragment_perfil"
+        android:label="Perfil"
         tools:layout="@layout/fragment_perfil" />
     <fragment
         android:id="@+id/contratoFragment"
         android:name="com.example.final_inmobiliaria.ui.Contrato.ContratoFragment"
-        android:label="fragment_contrato"
+        android:label="Contratos Vigentes"
         tools:layout="@layout/fragment_contrato" >
         <action
             android:id="@+id/action_contratoFragment_to_contratoDetalleFragment"
@@ -28,12 +32,12 @@
     <fragment
         android:id="@+id/inicioFragment"
         android:name="com.example.final_inmobiliaria.ui.Inicio.InicioFragment"
-        android:label="fragment_inicio"
+        android:label="Ubicacion"
         tools:layout="@layout/fragment_inicio" />
     <fragment
         android:id="@+id/inmuebleFragment"
         android:name="com.example.final_inmobiliaria.ui.Inmueble.InmueblesFragment"
-        android:label="fragment_inmueble"
+        android:label="Inmuebles"
         tools:layout="@layout/fragment_inmueble" >
         <action
             android:id="@+id/action_inmuebleFragment_to_detalleInmuebleFragment"
@@ -42,7 +46,7 @@
     <fragment
         android:id="@+id/inquilinoFragment"
         android:name="com.example.final_inmobiliaria.ui.Inquilino.InquilinoFragment"
-        android:label="fragment_inquilino"
+        android:label="Inquilinos"
         tools:layout="@layout/fragment_inquilino" >
         <action
             android:id="@+id/action_inquilinoFragment_to_detalleInquilinoFragment"
@@ -51,7 +55,7 @@
     <fragment
         android:id="@+id/detalleInmuebleFragment"
         android:name="com.example.final_inmobiliaria.ui.Inmueble.DetalleInmuebleFragment"
-        android:label="fragment_detalle_inmueble"
+        android:label="Inmueble"
         tools:layout="@layout/fragment_detalle_inmueble" >
         <action
             android:id="@+id/action_detalleInmuebleFragment_to_inmuebleFragment"
@@ -60,7 +64,7 @@
     <fragment
         android:id="@+id/detalleInquilinoFragment"
         android:name="com.example.final_inmobiliaria.ui.Inquilino.DetalleInquilinoFragment"
-        android:label="fragment_detalle_inquilino"
+        android:label="Inquilino"
         tools:layout="@layout/fragment_detalle_inquilino" >
         <action
             android:id="@+id/action_detalleInquilinoFragment_to_inquilinoFragment"
@@ -69,7 +73,7 @@
     <fragment
         android:id="@+id/contratoDetalleFragment"
         android:name="com.example.final_inmobiliaria.ui.Contrato.ContratoDetalleFragment"
-        android:label="fragment_contrato_detalle"
+        android:label="Contrato"
         tools:layout="@layout/fragment_contrato_detalle" >
         <action
             android:id="@+id/action_contratoDetalleFragment_to_contratoFragment"
@@ -81,10 +85,14 @@
     <fragment
         android:id="@+id/pagoFragment"
         android:name="com.example.final_inmobiliaria.ui.Pago.PagoFragment"
-        android:label="fragment_pago"
+        android:label="Detalle de Pagos"
         tools:layout="@layout/fragment_pago" >
         <action
             android:id="@+id/action_pagoFragment_to_contratoDetalleFragment"
             app:destination="@id/contratoDetalleFragment" />
     </fragment>
+    <activity
+        android:id="@+id/loginActivity"
+        android:name="com.example.final_inmobiliaria.LoginActivity"
+        android:label="Login" />
 </navigation>

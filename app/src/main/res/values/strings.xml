@@ -17,4 +17,6 @@
     <string name="inmueble">Inmueble</string>
     <string name="inquilino">Inquilino</string>
     <string name="contrato">Contrato</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

@@ -1,30 +1,40 @@
 package com.example.final_inmobiliaria;
 
+import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Menu;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.final_inmobiliaria.modelo.Propietario;
-import com.example.final_inmobiliaria.request.ApiClient;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.navigation.NavigationView;
-
-import androidx.lifecycle.ViewModelProvider;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.final_inmobiliaria.databinding.ActivityMainBinding;
+import com.example.final_inmobiliaria.modelo.Propietario;
+import com.example.final_inmobiliaria.request.ApiClient;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+
+    private int bandera;
+    private SensorManager sm;
+    private LeeSensor ls;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarMain.toolbar);
-        binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
+        binding.appBarMain.toolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -55,7 +65,25 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
 
+
+
     }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        obtenerSensor();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        sm.unregisterListener(ls);
+    }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -72,6 +100,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void iniciarHeader(NavigationView navigationView){
+
+
         ApiClient api= ApiClient.getApi();
 
         View header = navigationView.getHeaderView(0);
@@ -84,4 +114,41 @@ public class MainActivity extends AppCompatActivity {
         avatar.setImageResource(p.getAvatar());
     }
 
+    /*----------------------------------------------------
+        Sensor
+    ----------------------------------------------------*/
+
+    public void obtenerSensor()
+    {
+
+        ls = new LeeSensor();
+        sm = (SensorManager) getSystemService(SENSOR_SERVICE);
+
+        List<Sensor> listaSensores = sm.getSensorList(Sensor.TYPE_ACCELEROMETER);
+
+        if (listaSensores.size() > 0)
+        {
+            sm.registerListener(ls,listaSensores.get(0),SensorManager.SENSOR_DELAY_GAME);
+        }
+    }
+
+    private class LeeSensor implements SensorEventListener
+    {
+
+
+        @Override
+        public void onSensorChanged(SensorEvent sensorEvent) {
+            if (bandera == 0 && (sensorEvent.values[0] >= 7 || sensorEvent.values[0] <= -7))
+            {
+                Uri tel = Uri.parse("tel:"+113);
+                startActivity(new Intent(Intent.ACTION_CALL,tel));
+                bandera = 1;
+            }
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int i) {
+
+        }
+    }
 }
