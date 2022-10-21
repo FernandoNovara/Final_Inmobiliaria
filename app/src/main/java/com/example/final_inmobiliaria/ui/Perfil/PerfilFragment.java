@@ -1,19 +1,17 @@
 package com.example.final_inmobiliaria.ui.Perfil;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.final_inmobiliaria.R;
 import com.example.final_inmobiliaria.modelo.Propietario;
@@ -21,7 +19,7 @@ import com.example.final_inmobiliaria.modelo.Propietario;
 public class PerfilFragment extends Fragment {
 
     private PerfilViewModel perfilViewModel;
-    private EditText etCodigo,etDni,etNombre,etApellido,etEmail,etContraseña,etTelefono;
+    private EditText etDni,etNombre,etApellido,etEmail,etContraseña,etTelefono;
     private Button btnEditar;
 
     public static PerfilFragment newInstance() {
@@ -39,12 +37,11 @@ public class PerfilFragment extends Fragment {
         perfilViewModel.getPropietarioMutable().observe(getViewLifecycleOwner(),new Observer<Propietario>() {
             @Override
             public void onChanged(Propietario propietario) {
-                etCodigo.setText(propietario.getId()+"");
                 etDni.setText(propietario.getDni()+"");
                 etNombre.setText(propietario.getNombre());
                 etApellido.setText(propietario.getApellido());
                 etEmail.setText(propietario.getEmail());
-                etContraseña.setText(propietario.getContraseña()+"");
+                etContraseña.setText("*****");
                 etTelefono.setText(propietario.getTelefono());
             }
         });
@@ -63,7 +60,7 @@ public class PerfilFragment extends Fragment {
                 etNombre.setEnabled(aBoolean);
                 etApellido.setEnabled(aBoolean);
                 etEmail.setEnabled(aBoolean);
-                etContraseña.setEnabled(aBoolean);
+                etContraseña.setEnabled(false);
                 etTelefono.setEnabled(aBoolean);
             }
         });
@@ -75,7 +72,6 @@ public class PerfilFragment extends Fragment {
 
     private void Inicializar(View view)
     {
-        etCodigo = view.findViewById(R.id.etCodigo);
         etDni = view.findViewById(R.id.etDni);
         etNombre = view.findViewById(R.id.etNombre);
         etApellido = view.findViewById(R.id.etApellido);
@@ -93,12 +89,11 @@ public class PerfilFragment extends Fragment {
             public void onClick(View view)
             {
                 Propietario p = new Propietario();
-                p.setId(Integer.parseInt(etCodigo.getText().toString()));
-                p.setDni(Long.parseLong(etDni.getText().toString()));
+                p.setDni(etDni.getText().toString());
                 p.setApellido(etApellido.getText().toString());
                 p.setNombre(etNombre.getText().toString());
                 p.setEmail(etEmail.getText().toString());
-                p.setContraseña(etContraseña.getText().toString());
+                p.setContraseña("");
                 p.setTelefono(etTelefono.getText().toString());
 
                 perfilViewModel.accionar(btnEditar.getText().toString(),p);

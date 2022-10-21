@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,6 +40,8 @@ public class DetalleInmuebleFragment extends Fragment {
         return view;
     }
 
+
+
     private void Inicializar(View view)
     {
         tvCodigoDetalle = view.findViewById(R.id.tvCodigoDetalle);
@@ -49,6 +52,14 @@ public class DetalleInmuebleFragment extends Fragment {
         tvPrecioDetalle = view.findViewById(R.id.tvPrecioDetalle);
         cbEstado = view.findViewById(R.id.cbEstadoDetalle);
         ivInmuebleDetalle = view.findViewById(R.id.ivInmuebleDetalle);
+
+        cbEstado.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                detalleInmuebleViewModel.CambiarEstado();
+            }
+        });
+
 
         detalleInmuebleViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication()).create(DetalleInmuebleViewModel.class);
         detalleInmuebleViewModel.getInmuebleMutable().observe(getViewLifecycleOwner(), new Observer<Inmueble>() {
@@ -61,15 +72,19 @@ public class DetalleInmuebleFragment extends Fragment {
             tvTipoDetalle.setText(inmueble.getTipo());
             tvAmbientesDetalle.setText(inmueble.getAmbientes()+ "");
             tvPrecioDetalle.setText("$" +inmueble.getPrecio());
-            cbEstado.setChecked(inmueble.isEstado());
+
+            cbEstado.setChecked(inmueble.getEstado());
+
             Glide.with(getContext())
                     .load(inmueble.getImagen())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(ivInmuebleDetalle);
+
+
         }
     });
+
         detalleInmuebleViewModel.cargarInmueble(getArguments());
+
     }
-
-
 }

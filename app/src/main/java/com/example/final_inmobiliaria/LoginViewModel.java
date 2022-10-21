@@ -3,14 +3,18 @@ package com.example.final_inmobiliaria;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.widget.Toast;
+import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
-import com.example.final_inmobiliaria.modelo.Propietario;
-import com.example.final_inmobiliaria.request.ApiClient;
+import com.example.final_inmobiliaria.modelo.User;
+import com.example.final_inmobiliaria.request.ApiRetrofit;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginViewModel extends AndroidViewModel
 {
@@ -24,19 +28,38 @@ public class LoginViewModel extends AndroidViewModel
 
     public void iniciarSesion(String usuario, String contraseña)
     {
-        ApiClient api = ApiClient.getApi();
-        Propietario p = api.login(usuario, contraseña);
-        if (p != null)
-        {
-            Intent i = new Intent(context,MainActivity.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(i);
+        User user = new User(usuario,contraseña);
+        Call<String> tokenPromesa = ApiRetrofit.getServiceInmobiliaria().login(user);
+        tokenPromesa.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if(response.isSuccessful())
+                {
+                    Log.d("Salida",response.body());
+                    SharedPreferences sp = ApiRetrofit.obtenerSharedPreferences(context);
+                    SharedPreferences.Editor editor = sp.edit();
+                    String token ="Bearer "+response.body();
+                    editor.putString("token",token);
+                    editor.commit();
 
-            Toast.makeText(context, "Bienvenido "+p.getNombre()+" "+p.getApellido(), Toast.LENGTH_LONG).show();
-        }
-        else
-        {
-            Toast.makeText(context,"Usuario y/o Contraseña Incorrecta.", Toast.LENGTH_LONG).show();
-        }
+                    Intent i = new Intent(context,MainActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(i);
+
+
+                }
+                else
+                {
+                    Log.d("Salida","sin respuesta");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t)
+            {
+                Log.d("Salida",t.getMessage());
+            }
+        });
+
     }
 }

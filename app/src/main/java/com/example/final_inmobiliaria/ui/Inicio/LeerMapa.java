@@ -32,6 +32,7 @@ public class LeerMapa implements OnMapReadyCallback {
     private Context context;
     private GoogleMap googleMap;
     private LocationManager manager;
+    private Location Ubicacion;
     static final LatLng INMOBILIARIA = new LatLng(-33.051034, -65.627148);
     static final LatLng SANLUIS = new LatLng(-33.280576, -66.332482);
     static final LatLng ULP = new LatLng(-33.150720, -66.306864);
@@ -53,8 +54,8 @@ public class LeerMapa implements OnMapReadyCallback {
 
         CameraPosition positionInmobiliaria = new CameraPosition.Builder()
                 .target(INMOBILIARIA)
-                .zoom(20)
-                .bearing(0)
+                .zoom(10)
+                .bearing(10)
                 .build();
 
         CameraUpdate caInmobiliaria = CameraUpdateFactory.newCameraPosition(positionInmobiliaria);
@@ -81,6 +82,7 @@ public class LeerMapa implements OnMapReadyCallback {
                 public void onSuccess(Location location) {
                     if(location != null)
                     {
+                        Ubicacion = location;
                         LatLng miUbicacion = new LatLng(location.getLatitude(),location.getLongitude());
                         googleMap.addMarker(new MarkerOptions().position(miUbicacion))
                                 .setTitle("Mi Ubicacion");
@@ -105,6 +107,7 @@ public class LeerMapa implements OnMapReadyCallback {
                 public void onSuccess(Location location) {
                     if (location != null)
                     {
+                        Ubicacion = location;
                         LatLng miUbicacion = new LatLng(location.getLatitude(),location.getLongitude());
                         googleMap.addMarker(new MarkerOptions().position(miUbicacion))
                                 .setTitle("Mi Ubicacion");
@@ -113,6 +116,11 @@ public class LeerMapa implements OnMapReadyCallback {
             });
             manager.removeUpdates(listener);
         }
+    }
+
+    public void ObtenerLocation()
+    {
+
     }
 
     private class ListenerPosition implements LocationListener

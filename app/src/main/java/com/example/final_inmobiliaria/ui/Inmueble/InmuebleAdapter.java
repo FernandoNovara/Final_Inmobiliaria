@@ -17,16 +17,18 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.final_inmobiliaria.R;
 import com.example.final_inmobiliaria.modelo.Inmueble;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class InmuebleAdapter extends RecyclerView.Adapter<InmuebleAdapter.ViewHolder> {
 
     private Context context;
-    private List<Inmueble> inmuebles;
+    private ArrayList<Inmueble> inmuebles;
     private LayoutInflater inflater;
+    private FloatingActionButton fbAgregar;
 
-    public InmuebleAdapter( Context contexto, List<Inmueble> lista, LayoutInflater layout)
+    public InmuebleAdapter( Context contexto, ArrayList<Inmueble> lista, LayoutInflater layout)
     {
         context = contexto;
         inmuebles = lista;

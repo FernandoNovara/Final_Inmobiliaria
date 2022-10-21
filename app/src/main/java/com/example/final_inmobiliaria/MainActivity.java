@@ -1,12 +1,12 @@
 package com.example.final_inmobiliaria;
 
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,10 +22,15 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.final_inmobiliaria.databinding.ActivityMainBinding;
 import com.example.final_inmobiliaria.modelo.Propietario;
 import com.example.final_inmobiliaria.request.ApiClient;
+import com.example.final_inmobiliaria.request.ApiRetrofit;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -108,10 +113,31 @@ public class MainActivity extends AppCompatActivity {
         ImageView avatar = header.findViewById(R.id.ivFotoPerfil);
         TextView nombreProp = header.findViewById(R.id.tvNombrePerfil);
         TextView mailProp = header.findViewById(R.id.tvEmailPerfil);
-        Propietario p = api.obtenerUsuarioActual();
-        nombreProp.setText(p.getNombre()+ " " + p.getApellido());
-        mailProp.setText(p.getEmail());
-        avatar.setImageResource(p.getAvatar());
+
+        SharedPreferences sp = ApiRetrofit.obtenerSharedPreferences(navigationView.getContext());
+        Call<Propietario> propietario = ApiRetrofit.getServiceInmobiliaria().obtenerPerfil(sp.getString("token","-1"));
+        propietario.enqueue(new Callback<Propietario>() {
+            @Override
+            public void onResponse(Call<Propietario> call, Response<Propietario> response) {
+                if (response.isSuccessful())
+                {
+                    Propietario p = response.body();
+                    nombreProp.setText(p.getNombre()+ " " + p.getApellido());
+                    mailProp.setText(p.getEmail());
+                    avatar.setImageResource(p.getAvatar());
+                }
+                else
+                {
+                    Log.d("Salida","no mando nada");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Propietario> call, Throwable t) {
+
+            }
+        });
+
     }
 
     /*----------------------------------------------------
@@ -140,9 +166,9 @@ public class MainActivity extends AppCompatActivity {
         public void onSensorChanged(SensorEvent sensorEvent) {
             if (bandera == 0 && (sensorEvent.values[0] >= 7 || sensorEvent.values[0] <= -7))
             {
-                Uri tel = Uri.parse("tel:"+113);
-                startActivity(new Intent(Intent.ACTION_CALL,tel));
-                bandera = 1;
+               // Uri tel = Uri.parse("tel:"+113);
+               //startActivity(new Intent(Intent.ACTION_CALL,tel));
+               //bandera = 1;
             }
         }
 

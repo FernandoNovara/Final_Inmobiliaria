@@ -42,6 +42,9 @@
         <action
             android:id="@+id/action_inmuebleFragment_to_detalleInmuebleFragment"
             app:destination="@id/detalleInmuebleFragment" />
+        <action
+            android:id="@+id/action_inmuebleFragment_to_agregarInmuebleFragment"
+            app:destination="@id/agregarInmuebleFragment" />
     </fragment>
     <fragment
         android:id="@+id/inquilinoFragment"
@@ -95,4 +98,12 @@
         android:id="@+id/loginActivity"
         android:name="com.example.final_inmobiliaria.LoginActivity"
         android:label="Login" />
+    <fragment
+        android:id="@+id/agregarInmuebleFragment"
+        android:name="com.example.final_inmobiliaria.ui.Inmueble.AgregarInmuebleFragment"
+        android:label="AgregarInmuebleFragment" >
+        <action
+            android:id="@+id/action_agregarInmuebleFragment_to_inmuebleFragment"
+            app:destination="@id/inmuebleFragment" />
+    </fragment>
 </navigation>
