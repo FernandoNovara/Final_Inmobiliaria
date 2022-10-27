@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Propietario {
 
-    private int id;
+    private int idPropietario;
     private String dni;
     private String nombre;
     private String apellido;
@@ -15,7 +15,7 @@ public class Propietario {
 
     public Propietario(){}
     public Propietario(int id, String dni, String nombre, String apellido, String email, String clave, String telefono, int avatar) {
-        this.id = id;
+        this.idPropietario = id;
         this.dni = dni;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -26,11 +26,11 @@ public class Propietario {
     }
 
     public int getId() {
-        return id;
+        return idPropietario;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.idPropietario = id;
     }
 
     public String getDni() {
@@ -94,11 +94,11 @@ public class Propietario {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Propietario that = (Propietario) o;
-        return id == that.id;
+        return idPropietario == that.idPropietario;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(idPropietario);
     }
 }

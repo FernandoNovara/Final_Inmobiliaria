@@ -2,40 +2,60 @@ package com.example.final_inmobiliaria.ui.Inquilino;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.final_inmobiliaria.modelo.Inmueble;
-import com.example.final_inmobiliaria.request.ApiClient;
+import com.example.final_inmobiliaria.modelo.Contrato;
+import com.example.final_inmobiliaria.request.ApiRetrofit;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class InquilinoViewModel extends AndroidViewModel
 {
-    private MutableLiveData<ArrayList<Inmueble>> inmuebleMutable;
-    private Context context;
+    private MutableLiveData<ArrayList<Contrato>> contratoMutable;
+    private Context contexto;
 
     public InquilinoViewModel(@NonNull Application application) {
         super(application);
-        this.context = getApplication();
+        this.contexto = getApplication();
     }
 
 
-    public LiveData<ArrayList<Inmueble>> getInmuebleMutable()
+    public LiveData<ArrayList<Contrato>> getContratoMutable()
     {
-        if(inmuebleMutable == null)
+        if(contratoMutable == null)
         {
-            inmuebleMutable = new MutableLiveData<>();
+            contratoMutable = new MutableLiveData<>();
         }
-        return inmuebleMutable;
+        return contratoMutable;
     }
 
     public void cargarInmuebles()
     {
-        ApiClient api = ApiClient.getApi();
-        this.inmuebleMutable.setValue(api.obtenerPropiedadesAlquiladas());
+        SharedPreferences sp = ApiRetrofit.obtenerSharedPreferences(contexto);
+        Call<ArrayList<Contrato>> contratos = ApiRetrofit.getServiceInmobiliaria().ObtenerContratosVigentes(sp.getString("token","-1"));
+        contratos.enqueue(new Callback<ArrayList<Contrato>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Contrato>> call, Response<ArrayList<Contrato>> response) {
+                if ( response.isSuccessful())
+                {
+                    ArrayList<Contrato> lista = response.body();
+                    contratoMutable.setValue(lista);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Contrato>> call, Throwable t) {
+
+            }
+        });
     }
 }

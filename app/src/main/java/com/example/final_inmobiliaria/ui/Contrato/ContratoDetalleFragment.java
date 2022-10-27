@@ -49,10 +49,11 @@ public class ContratoDetalleFragment extends Fragment {
         contratoDetalleViewModel.getContratoMutable().observe(getViewLifecycleOwner(), new Observer<Contrato>() {
             @Override
             public void onChanged(Contrato contrato) {
+
                 etCodigoContrato.setText(contrato.getIdContrato()+"");
                 etFechaInicioContrato.setText(contrato.getFechaInicio());
-                etFechaFinalContrato.setText(contrato.getFechaFin());
-                etMontoContrato.setText(contrato.getMontoAlquiler()+"");
+                etFechaFinalContrato.setText(contrato.getFechaInicio());
+                etMontoContrato.setText(contrato.getMonto()+"");
                 etInquilinoContrato.setText(contrato.getInquilino().getNombre());
                 etInmuebleContrato.setText("Inmueble en " + contrato.getInmueble().getDireccion());
                 btnPagos.setOnClickListener(new View.OnClickListener() {

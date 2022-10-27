@@ -54,8 +54,8 @@ public class LeerMapa implements OnMapReadyCallback {
 
         CameraPosition positionInmobiliaria = new CameraPosition.Builder()
                 .target(INMOBILIARIA)
-                .zoom(10)
-                .bearing(10)
+                .zoom(18)
+                .bearing(0)
                 .build();
 
         CameraUpdate caInmobiliaria = CameraUpdateFactory.newCameraPosition(positionInmobiliaria);

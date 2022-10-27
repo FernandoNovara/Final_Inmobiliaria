@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.final_inmobiliaria.R;
-import com.example.final_inmobiliaria.modelo.Inmueble;
+import com.example.final_inmobiliaria.modelo.Contrato;
 
 import java.util.ArrayList;
 
@@ -43,12 +43,12 @@ public class ContratoFragment extends Fragment {
     {
         rvRecyclerContrato = view.findViewById(R.id.rvRecyclerContrato);
         contratoViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication()).create(ContratoViewModel.class);
-        contratoViewModel.getInmuebleMutable().observe(getViewLifecycleOwner(), new Observer<ArrayList<Inmueble>>() {
+        contratoViewModel.getContratoMutable().observe(getViewLifecycleOwner(), new Observer<ArrayList<Contrato>>() {
             @Override
-            public void onChanged(ArrayList<Inmueble> inmuebles) {
+            public void onChanged(ArrayList<Contrato> contratos) {
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(context,2,GridLayoutManager.VERTICAL,false);
                 rvRecyclerContrato.setLayoutManager(gridLayoutManager);
-                contratoAdapter = new ContratoAdapter(context,inmuebles,getLayoutInflater());
+                contratoAdapter = new ContratoAdapter(context,contratos,getLayoutInflater());
                 rvRecyclerContrato.setAdapter(contratoAdapter);
             }
         });

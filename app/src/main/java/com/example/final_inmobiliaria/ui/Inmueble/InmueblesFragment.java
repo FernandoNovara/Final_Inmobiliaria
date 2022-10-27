@@ -40,6 +40,18 @@ public class InmueblesFragment extends Fragment {
     {
         View view = inflater.inflate(R.layout.fragment_inmueble, container, false);
         context = view.getContext();
+
+        inmueblesViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication()).create(InmueblesViewModel.class);
+        inmueblesViewModel.getInmuebleMutable().observe(getViewLifecycleOwner(), new Observer<ArrayList<Inmueble>>() {
+            @Override
+            public void onChanged(ArrayList<Inmueble> inmuebles) {
+                GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),2,GridLayoutManager.VERTICAL,false);
+                rvRecyclerInmuebles.setLayoutManager(gridLayoutManager);
+                inmuebleAdapter = new InmuebleAdapter(context,inmuebles,getLayoutInflater());
+                rvRecyclerInmuebles.setAdapter(inmuebleAdapter);
+            }
+        });
+
         Inicializar(view);
         return view;
     }
@@ -55,16 +67,7 @@ public class InmueblesFragment extends Fragment {
             }
         });
 
-        inmueblesViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication()).create(InmueblesViewModel.class);
-        inmueblesViewModel.getInmuebleMutable().observe(getViewLifecycleOwner(), new Observer<ArrayList<Inmueble>>() {
-            @Override
-            public void onChanged(ArrayList<Inmueble> inmuebles) {
-                GridLayoutManager gridLayoutManager = new GridLayoutManager(context,2,GridLayoutManager.VERTICAL,false);
-                rvRecyclerInmuebles.setLayoutManager(gridLayoutManager);
-                inmuebleAdapter = new InmuebleAdapter(context,inmuebles,getLayoutInflater());
-                rvRecyclerInmuebles.setAdapter(inmuebleAdapter);
-            }
-        });
+
 
         inmueblesViewModel.cargarInmuebles();
     }

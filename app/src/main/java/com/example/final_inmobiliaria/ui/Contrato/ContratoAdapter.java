@@ -16,21 +16,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.final_inmobiliaria.R;
-import com.example.final_inmobiliaria.modelo.Inmueble;
-import com.example.final_inmobiliaria.request.ApiClient;
+import com.example.final_inmobiliaria.modelo.Contrato;
 
 import java.util.List;
 
 public class ContratoAdapter extends RecyclerView.Adapter<ContratoAdapter.ViewHolder>
 {
     private Context context;
-    private List<Inmueble> inmuebles;
+    private List<Contrato> contratos;
     private LayoutInflater inflater;
 
-    public ContratoAdapter(Context contexto, List<Inmueble> lista, LayoutInflater layout)
+    public ContratoAdapter(Context contexto, List<Contrato> lista, LayoutInflater layout)
     {
         context = contexto;
-        inmuebles = lista;
+        contratos = lista;
         inflater = layout;
     }
 
@@ -45,16 +44,16 @@ public class ContratoAdapter extends RecyclerView.Adapter<ContratoAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ContratoAdapter.ViewHolder holder, int position)
     {
-        holder.tvDireccionContrato.setText(inmuebles.get(position).getDireccion());
+        holder.tvDireccionContrato.setText(contratos.get(position).getInmueble().getDireccion());
         Glide.with(context)
-                .load(inmuebles.get(position).getImagen())
+                .load("http://www.secsanluis.com.ar/servicios/salon1.jpg")
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.ivImagenInmuebleContrato);
     }
 
     @Override
     public int getItemCount() {
-        return inmuebles.size();
+        return contratos.size();
     }
 
 
@@ -77,10 +76,9 @@ public class ContratoAdapter extends RecyclerView.Adapter<ContratoAdapter.ViewHo
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ApiClient api = ApiClient.getApi();
                     Bundle bundle = new Bundle();
-                    Inmueble inmueble = inmuebles.get(getAdapterPosition());
-                    bundle.putSerializable("inmueble",inmueble);
+                    Contrato contrato = contratos.get(getAdapterPosition());
+                    bundle.putSerializable("contrato",contrato);
                     Navigation.findNavController((Activity) context,R.id.nav_host_fragment_content_main).navigate(R.id.contratoDetalleFragment,bundle);
                 }
             });

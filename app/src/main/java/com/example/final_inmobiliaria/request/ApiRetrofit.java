@@ -3,7 +3,9 @@ package com.example.final_inmobiliaria.request;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.final_inmobiliaria.modelo.Contrato;
 import com.example.final_inmobiliaria.modelo.Inmueble;
+import com.example.final_inmobiliaria.modelo.Pago;
 import com.example.final_inmobiliaria.modelo.Propietario;
 import com.example.final_inmobiliaria.modelo.User;
 import com.google.gson.Gson;
@@ -74,5 +76,12 @@ public class ApiRetrofit
             @FormUrlEncoded
             @POST("Inmueble/CambiarEstado")
             Call<Boolean> CambiarEstado(@Header("Authorization") String token,@Field("id") int id);
+
+            @GET("Contrato")
+            Call<ArrayList<Contrato>> ObtenerContratosVigentes(@Header("Authorization") String token);
+
+            @FormUrlEncoded
+            @POST("Pago/ObtenerPagos")
+            Call<ArrayList<Pago>> ObtenerPagos(@Header("Authorization") String token, @Field("id") int id);
         }
 }

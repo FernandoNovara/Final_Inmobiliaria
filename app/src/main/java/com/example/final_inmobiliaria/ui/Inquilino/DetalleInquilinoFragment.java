@@ -37,7 +37,7 @@ public class DetalleInquilinoFragment extends Fragment {
     {
         tvCodigoDetalleInquilino = view.findViewById(R.id.tvCodigoDetalleInquilino);
         tvNombreDetalleInquilino = view.findViewById(R.id.tvNombreDetalleInquilino);
-        tvApellidoDetalleInquilino = view.findViewById(R.id.tvApellidoDetalleInquilino);
+        tvApellidoDetalleInquilino = view.findViewById(R.id.tvLugarTrabajoDetalleInquilino);
         tvDniDetalleInquilino = view.findViewById(R.id.tvDniDetalleInquilino);
         tvEmailDetalleInquilino = view.findViewById(R.id.tvEmailDetalleInquilino);
         tvTelefonoDetalleInquilino = view.findViewById(R.id.tvTelefonoDetalleInquilino);
@@ -49,8 +49,8 @@ public class DetalleInquilinoFragment extends Fragment {
             {
                 tvCodigoDetalleInquilino.setText(inquilino.getIdInquilino()+"");
                 tvNombreDetalleInquilino.setText(inquilino.getNombre());
-                tvApellidoDetalleInquilino.setText(inquilino.getApellido());
-                tvDniDetalleInquilino.setText(inquilino.getDNI()+" ");
+                tvApellidoDetalleInquilino.setText(inquilino.getLugarTrabajo());
+                tvDniDetalleInquilino.setText(inquilino.getDni()+" ");
                 tvEmailDetalleInquilino.setText(inquilino.getEmail());
                 tvTelefonoDetalleInquilino.setText(inquilino.getTelefono());
             }

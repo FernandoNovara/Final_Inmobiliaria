@@ -8,9 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.final_inmobiliaria.modelo.Inmueble;
 import com.example.final_inmobiliaria.modelo.Inquilino;
-import com.example.final_inmobiliaria.request.ApiClient;
 
 public class DetalleInquilinoViewModel extends AndroidViewModel
 {
@@ -32,9 +30,7 @@ public class DetalleInquilinoViewModel extends AndroidViewModel
 
     public void cargarInquilino(Bundle bundle)
     {
-        ApiClient api = ApiClient.getApi();
-        Inmueble inmueble = (Inmueble) bundle.get("inmueble");
-        Inquilino inquilino = api.obtenerInquilino(inmueble);
+        Inquilino inquilino = (Inquilino) bundle.get("inquilino");
         InquilinoMutable.setValue(inquilino);
     }
 

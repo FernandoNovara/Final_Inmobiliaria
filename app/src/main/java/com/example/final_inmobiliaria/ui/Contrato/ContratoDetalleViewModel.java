@@ -9,8 +9,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.final_inmobiliaria.modelo.Contrato;
-import com.example.final_inmobiliaria.modelo.Inmueble;
-import com.example.final_inmobiliaria.request.ApiClient;
 
 public class ContratoDetalleViewModel extends AndroidViewModel
 {
@@ -31,9 +29,7 @@ public class ContratoDetalleViewModel extends AndroidViewModel
 
     public void cargarContrato(Bundle bundle)
     {
-        ApiClient api = ApiClient.getApi();
-        Inmueble inmueble = (Inmueble) bundle.get("inmueble");
-        Contrato contrato = api.obtenerContratoVigente(inmueble);
+        Contrato contrato = (Contrato) bundle.get("contrato");
         contratoMutable.setValue(contrato);
     }
 }

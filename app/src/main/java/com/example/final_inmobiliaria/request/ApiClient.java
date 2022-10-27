@@ -53,7 +53,7 @@ public Propietario login(String mail, final String password){
     public ArrayList<Inmueble> obtnerPropiedades(){
         ArrayList<Inmueble> temp=new ArrayList<>();
         for(Inmueble inmueble:inmuebles){
-            if(inmueble.getPropietario().equals(usuarioActual)){
+            if(inmueble.getdueño().equals(usuarioActual)){
                 temp.add(inmueble);
             }
         }
@@ -64,7 +64,7 @@ public Propietario login(String mail, final String password){
     public ArrayList<Inmueble> obtenerPropiedadesAlquiladas(){
         ArrayList<Inmueble> temp=new ArrayList<>();
         for(Contrato contrato:contratos){
-            if(contrato.getInmueble().getPropietario().equals(usuarioActual)){
+            if(contrato.getInmueble().getdueño().equals(usuarioActual)){
                 temp.add(contrato.getInmueble());
             }
         }
@@ -134,7 +134,7 @@ public Propietario login(String mail, final String password){
         propietarios.add(sonia);
 
         //Inquilinos
-        Inquilino mario=new Inquilino(100,25340691L,"Mario","Luna","Aiello sup.","luna@mail.com","2664253411","Lucero Roberto","2664851422");
+        Inquilino mario=new Inquilino(100,25340691L,"Mario","Aiello sup.","luna@mail.com","2664253411");
         inquilinos.add(mario);
 
         //Inmuebles
@@ -151,12 +151,12 @@ public Propietario login(String mail, final String password){
         inmuebles.add(casita);
 
         //Contratos
-        Contrato uno=new Contrato(701, "05/08/2020","05/08/2023",17000,mario,otraCasa);
+        Contrato uno=new Contrato(701, null,null,17000,mario,otraCasa);
         contratos.add(uno);
         //Pagos
-        pagos.add(new Pago(900,1,uno,17000,"10/08/2020"));
-        pagos.add(new Pago(901,2,uno,17000,"10/09/2020"));
-        pagos.add(new Pago(902,3,uno,17000,"10/10/2020"));
+        pagos.add(new Pago(900,uno,17000,"10/08/2020"));
+        pagos.add(new Pago(901,uno,17000,"10/09/2020"));
+        pagos.add(new Pago(902,uno,17000,"10/10/2020"));
 
 
 
