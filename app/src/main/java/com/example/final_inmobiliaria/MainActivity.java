@@ -1,10 +1,12 @@
 package com.example.final_inmobiliaria;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -68,10 +70,6 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-
-
-
-
     }
 
 
@@ -166,9 +164,9 @@ public class MainActivity extends AppCompatActivity {
         public void onSensorChanged(SensorEvent sensorEvent) {
             if (bandera == 0 && (sensorEvent.values[0] >= 7 || sensorEvent.values[0] <= -7))
             {
-               // Uri tel = Uri.parse("tel:"+113);
-               //startActivity(new Intent(Intent.ACTION_CALL,tel));
-               //bandera = 1;
+               Uri tel = Uri.parse("tel:"+113);
+               startActivity(new Intent(Intent.ACTION_CALL,tel));
+               bandera = 1;
             }
         }
 

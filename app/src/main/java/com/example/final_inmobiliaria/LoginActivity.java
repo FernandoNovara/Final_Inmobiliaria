@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 public class LoginActivity extends AppCompatActivity
 {
-    private Button btnLogin;
+    private Button btnLogin,btnOlvidado;
     private EditText etUsuario,etContraseña;
     private LoginViewModel loginViewModel;
 
@@ -31,10 +31,19 @@ public class LoginActivity extends AppCompatActivity
         btnLogin=findViewById(R.id.btnLogin);
         etUsuario=findViewById(R.id.etUsuario);
         etContraseña=findViewById(R.id.etContraseña);
+        btnOlvidado = findViewById(R.id.btnOlvidado);
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 loginViewModel.iniciarSesion(etUsuario.getText().toString(),etContraseña.getText().toString());
+            }
+        });
+
+        btnOlvidado.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loginViewModel.Olvidado();
             }
         });
     }

@@ -1,8 +1,10 @@
 package com.example.final_inmobiliaria.ui.Inmueble;
 
+import static android.Manifest.permission.CAMERA;
+import static androidx.core.content.PermissionChecker.checkSelfPermission;
+
 import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,29 +18,33 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
+import androidx.core.content.PermissionChecker;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.final_inmobiliaria.R;
 import com.example.final_inmobiliaria.modelo.Inmueble;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Base64;
 
+
 public class AgregarInmuebleFragment extends Fragment {
 
     private AgregarInmuebleViewModel AgregarViewModel;
+    private TextView tvUbicacionAgregar;
     private EditText etDireccionAgregar,etAmbientesAgregar,etPrecioAgregar;
     private Spinner spTipoAgregar,spUsoAgregar;
     private CheckBox cbEstadoAgregar;
-    private Button btnAgregar;
+    private Button btnAgregar,btnMarcarUbicacion;
     private ImageView ivInmuebleAgregar;
-    private Inmueble inmueble;
+    private LatLng ubicacion;
     private String encoded;
     private int REQUEST_IMAGE_CAPTURE = 1;
 
@@ -60,9 +66,18 @@ public class AgregarInmuebleFragment extends Fragment {
                 ivInmuebleAgregar.setImageBitmap(bitmap);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
-                byte[] b = baos.toByteArray();
+                byte [] b = baos.toByteArray();
 
                 encoded = Base64.getEncoder().encodeToString(b);
+            }
+        });
+
+        AgregarViewModel.getLatLngMutable().observe(getViewLifecycleOwner(), new Observer<LatLng>() {
+            @Override
+            public void onChanged(LatLng latLng) {
+                String dato = "Lat/Log: "+latLng.latitude + "," + latLng.longitude;
+                tvUbicacionAgregar.setText(dato);
+                ubicacion = latLng;
             }
         });
 
@@ -72,7 +87,6 @@ public class AgregarInmuebleFragment extends Fragment {
 
     private void Inicializar(View view)
     {
-        AgregarViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication()).create(AgregarInmuebleViewModel.class);
 
         etDireccionAgregar = view.findViewById(R.id.etDireccionAgregar);
         etAmbientesAgregar = view.findViewById(R.id.etAmbientesAgregar);
@@ -82,6 +96,8 @@ public class AgregarInmuebleFragment extends Fragment {
         cbEstadoAgregar = view.findViewById(R.id.cbEstadoAgregar);
         btnAgregar = view.findViewById(R.id.btnAgregar);
         ivInmuebleAgregar = view.findViewById(R.id.ivInmuebleAgregar);
+        tvUbicacionAgregar = view.findViewById(R.id.tvUbicacionAgregar);
+        btnMarcarUbicacion = view.findViewById(R.id.btnMarcarUbicacion);
 
         String[] opcionesUso = {"Residencial","Comercial"};
         String[] opcionesTipo = {"Local","Deposito","Casa","Departamento"};
@@ -91,21 +107,21 @@ public class AgregarInmuebleFragment extends Fragment {
         ivInmuebleAgregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(getContext(),CAMERA) != PermissionChecker.PERMISSION_GRANTED)
                 {
-                    if (ActivityCompat.checkSelfPermission( getActivity().getApplicationContext(), Manifest.permission.CAMERA)==PackageManager.PERMISSION_GRANTED)
-                    {
-                        AbrirCamara();
-                    }
-                    else
-                    {
-                        ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.CAMERA},REQUEST_IMAGE_CAPTURE);
-                    }
+                    requestPermissions(new String[]{Manifest.permission.CAMERA},1000);
                 }
                 else
                 {
-                    AbrirCamara();
+                    AbrirCamara(view);
                 }
+            }
+        });
+
+        btnMarcarUbicacion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AgregarViewModel.CargarUbicacion();
             }
         });
 
@@ -113,12 +129,15 @@ public class AgregarInmuebleFragment extends Fragment {
         btnAgregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Inmueble inmueble = new Inmueble();
                 inmueble.setDireccion(etDireccionAgregar.getText().toString());
                 inmueble.setUso(spUsoAgregar.getSelectedItem().toString());
                 inmueble.setTipo(spTipoAgregar.getSelectedItem().toString());
                 inmueble.setAmbientes(Integer.parseInt(etAmbientesAgregar.getText().toString()));
                 inmueble.setPrecio(Double.parseDouble(etPrecioAgregar.getText().toString()));
                 inmueble.setImagen(encoded);
+                inmueble.setLatitud(ubicacion.latitude + "");
+                inmueble.setLongitud(ubicacion.longitude + "");
                 if (cbEstadoAgregar.isChecked()) {
                     inmueble.setEstado(true);
                 }
@@ -136,7 +155,7 @@ public class AgregarInmuebleFragment extends Fragment {
         spinner.setAdapter(adapter);
     }
 
-    public void AbrirCamara() {
+    public void AbrirCamara(View view) {
         Intent tomarFoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (tomarFoto.resolveActivity(getActivity().getPackageManager()) != null) {
             startActivityForResult(tomarFoto, REQUEST_IMAGE_CAPTURE);
@@ -145,30 +164,9 @@ public class AgregarInmuebleFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        AgregarInmuebleFragment.super.onActivityResult(requestCode,resultCode,data);
+        super.onActivityResult(requestCode,resultCode,data);
         AgregarViewModel.respuetaDeCamara(requestCode,resultCode,data,REQUEST_IMAGE_CAPTURE);
+
     }
-
-
-
-    /*@Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode == REQUEST_IMAGE_CAPTURE)
-        {
-            if(permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            {
-                AbrirCamara();
-            }
-            else
-            {
-                Toast.makeText(this.getContext(),"Se nesesita permiso",Toast.LENGTH_LONG).show();
-            }
-        }
-        else
-        {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-
-    }*/
 
 }

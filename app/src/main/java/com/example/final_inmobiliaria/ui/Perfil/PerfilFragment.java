@@ -1,5 +1,6 @@
 package com.example.final_inmobiliaria.ui.Perfil;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.example.final_inmobiliaria.R;
 import com.example.final_inmobiliaria.modelo.Propietario;
@@ -20,7 +22,7 @@ public class PerfilFragment extends Fragment {
 
     private PerfilViewModel perfilViewModel;
     private EditText etDni,etNombre,etApellido,etEmail,etContraseña,etTelefono;
-    private Button btnEditar;
+    private Button btnEditar,btnCambiar;
 
     public static PerfilFragment newInstance() {
         return new PerfilFragment();
@@ -41,7 +43,6 @@ public class PerfilFragment extends Fragment {
                 etNombre.setText(propietario.getNombre());
                 etApellido.setText(propietario.getApellido());
                 etEmail.setText(propietario.getEmail());
-                etContraseña.setText("*****");
                 etTelefono.setText(propietario.getTelefono());
             }
         });
@@ -60,7 +61,6 @@ public class PerfilFragment extends Fragment {
                 etNombre.setEnabled(aBoolean);
                 etApellido.setEnabled(aBoolean);
                 etEmail.setEnabled(aBoolean);
-                etContraseña.setEnabled(false);
                 etTelefono.setEnabled(aBoolean);
             }
         });
@@ -76,9 +76,9 @@ public class PerfilFragment extends Fragment {
         etNombre = view.findViewById(R.id.etNombre);
         etApellido = view.findViewById(R.id.etApellido);
         etEmail = view.findViewById(R.id.etEmail);
-        etContraseña = view.findViewById(R.id.etContraseñaPerfil );
         etTelefono = view.findViewById(R.id.etTelefono);
         btnEditar = view.findViewById(R.id.btnEditar);
+        btnCambiar = view.findViewById(R.id.btnCambiar);
 
         perfilViewModel.mostrarDatos();
 
@@ -97,6 +97,14 @@ public class PerfilFragment extends Fragment {
                 p.setTelefono(etTelefono.getText().toString());
 
                 perfilViewModel.accionar(btnEditar.getText().toString(),p);
+            }
+        });
+
+
+        btnCambiar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController((Activity) getContext(),R.id.nav_host_fragment_content_main).navigate(R.id.resetearPassFragment);
             }
         });
 

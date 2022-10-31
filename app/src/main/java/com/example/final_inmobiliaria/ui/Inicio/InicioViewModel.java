@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 public class InicioViewModel extends AndroidViewModel {
 
@@ -30,6 +29,7 @@ public class InicioViewModel extends AndroidViewModel {
 
     public void obtenerMapa()
     {
+
         leerMapaMutable.setValue(new LeerMapa(context));
     }
 

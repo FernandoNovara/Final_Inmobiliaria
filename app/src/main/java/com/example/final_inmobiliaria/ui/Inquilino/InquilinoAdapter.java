@@ -44,7 +44,7 @@ public class InquilinoAdapter extends RecyclerView.Adapter<InquilinoAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.tvDireccionInquilino.setText(contratos.get(position).getInmueble().getDireccion());
         Glide.with(context)
-                .load("http://www.secsanluis.com.ar/servicios/salon1.jpg")
+                .load(contratos.get(position).getInmueble().getImagen())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.ivImagenInmuebleInquilino);
     }

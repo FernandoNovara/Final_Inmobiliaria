@@ -19,7 +19,11 @@
         android:id="@+id/perfilFragment"
         android:name="com.example.final_inmobiliaria.ui.Perfil.PerfilFragment"
         android:label="Perfil"
-        tools:layout="@layout/fragment_perfil" />
+        tools:layout="@layout/fragment_perfil" >
+        <action
+            android:id="@+id/action_perfilFragment_to_resetearPassFragment"
+            app:destination="@id/resetearPassFragment" />
+    </fragment>
     <fragment
         android:id="@+id/contratoFragment"
         android:name="com.example.final_inmobiliaria.ui.Contrato.ContratoFragment"
@@ -106,4 +110,18 @@
             android:id="@+id/action_agregarInmuebleFragment_to_inmuebleFragment"
             app:destination="@id/inmuebleFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/resetearPassFragment"
+        android:name="com.example.final_inmobiliaria.ui.Perfil.ResetearPassFragment"
+        android:label="fragment_resetear_pass"
+        tools:layout="@layout/fragment_resetear_pass" >
+        <action
+            android:id="@+id/action_resetearPassFragment_to_perfilFragment"
+            app:destination="@id/perfilFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/pedirEmailFragment"
+        android:name="com.example.final_inmobiliaria.ui.Perfil.PedirEmailFragment"
+        android:label="fragment_pedir_email"
+        tools:layout="@layout/fragment_pedir_email" />
 </navigation>

@@ -46,7 +46,7 @@ public class ContratoAdapter extends RecyclerView.Adapter<ContratoAdapter.ViewHo
     {
         holder.tvDireccionContrato.setText(contratos.get(position).getInmueble().getDireccion());
         Glide.with(context)
-                .load("http://www.secsanluis.com.ar/servicios/salon1.jpg")
+                .load(contratos.get(position).getInmueble().getImagen())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.ivImagenInmuebleContrato);
     }

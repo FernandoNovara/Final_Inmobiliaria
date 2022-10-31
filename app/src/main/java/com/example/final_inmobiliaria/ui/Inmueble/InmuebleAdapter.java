@@ -47,7 +47,7 @@ public class InmuebleAdapter extends RecyclerView.Adapter<InmuebleAdapter.ViewHo
         holder.tvDireccion.setText(inmuebles.get(position).getDireccion());
         holder.tvPrecio.setText( "$ " + inmuebles.get(position).getPrecio());
         Glide.with(context)
-                .load("http://www.secsanluis.com.ar/servicios/salon1.jpg")
+                .load(inmuebles.get(position).getImagen())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.ivImagenInmueble);
     }

@@ -11,6 +11,7 @@ import androidx.lifecycle.AndroidViewModel;
 
 import com.example.final_inmobiliaria.modelo.User;
 import com.example.final_inmobiliaria.request.ApiRetrofit;
+import com.example.final_inmobiliaria.ui.Perfil.PedirEmailActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,5 +62,12 @@ public class LoginViewModel extends AndroidViewModel
             }
         });
 
+    }
+
+    public void Olvidado()
+    {
+        Intent i = new Intent(context, PedirEmailActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i);
     }
 }

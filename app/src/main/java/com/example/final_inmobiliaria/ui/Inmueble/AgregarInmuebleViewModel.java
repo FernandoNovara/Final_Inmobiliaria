@@ -18,6 +18,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.final_inmobiliaria.modelo.Inmueble;
 import com.example.final_inmobiliaria.request.ApiRetrofit;
+import com.example.final_inmobiliaria.ui.Inicio.LeerMapa;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.ByteArrayOutputStream;
 
@@ -29,11 +31,21 @@ public class AgregarInmuebleViewModel extends AndroidViewModel
 {
     private Context contexto;
     private MutableLiveData<Bitmap> fotoMutable;
+    private MutableLiveData<LatLng> latLngMutable;
 
     public AgregarInmuebleViewModel(@NonNull Application application)
     {
         super(application);
         this.contexto = application.getApplicationContext();
+    }
+
+    public LiveData<LatLng> getLatLngMutable()
+    {
+        if(latLngMutable == null)
+        {
+            latLngMutable = new MutableLiveData<>();
+        }
+        return latLngMutable;
     }
 
     public LiveData<Bitmap> getFotoMutable()
@@ -71,18 +83,37 @@ public class AgregarInmuebleViewModel extends AndroidViewModel
         Log.d("Salida","Entro al Agregar");
     }
 
+    public void CargarUbicacion()
+    {
+        LeerMapa leer = new LeerMapa(contexto);
+        leer.cargarPosicion();
+        SharedPreferences sp = contexto.getSharedPreferences("ubicacion",0);
+        LatLng dato = new LatLng(Double.parseDouble(sp.getString("latitud","-1")),Double.parseDouble(sp.getString("longitud","-1")));
+        latLngMutable.setValue(dato);
+    }
+
     public void respuetaDeCamara(int requestCode, int resultCode,Intent data, int REQUEST_IMAGE_CAPTURE){
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            //Recupero la respuesta de la camara.
-            Bundle extras = data.getExtras();
 
-            //paso a bitmap los datos de la camara
-            Bitmap foto = (Bitmap) extras.get("data");
+            if(data.getExtras().get("data") != null)
+            {
+                try
+                {
+                    Bundle extra = data.getExtras();
+                    Bitmap foto = (Bitmap) extra.get("data");
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            foto.compress(Bitmap.CompressFormat.JPEG,100,baos);
-            byte[] b = baos.toByteArray();
-            fotoMutable.postValue(foto);
+                    foto.compress(Bitmap.CompressFormat.JPEG,100,baos);
+                    byte[] b = baos.toByteArray();
+
+                    this.fotoMutable.postValue(foto);
+                }
+                catch (Exception ex)
+                {
+                    Toast.makeText(contexto,"No hay foto",Toast.LENGTH_LONG).show();
+                }
+            }
+
         }
     }
 

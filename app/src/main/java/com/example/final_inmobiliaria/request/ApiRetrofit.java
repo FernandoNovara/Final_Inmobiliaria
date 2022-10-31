@@ -83,5 +83,13 @@ public class ApiRetrofit
             @FormUrlEncoded
             @POST("Pago/ObtenerPagos")
             Call<ArrayList<Pago>> ObtenerPagos(@Header("Authorization") String token, @Field("id") int id);
+
+            @FormUrlEncoded
+            @POST("Propietario/ObtenerEmail")
+            Call<Propietario> ObtenerEmail(@Field("Email") String email);
+
+            @FormUrlEncoded
+            @POST("Propietario/ResetearPass")
+            Call<Propietario> ResetearPass(@Header("Authorization") String token, @Field("contraseña") String contraseña);
         }
 }
